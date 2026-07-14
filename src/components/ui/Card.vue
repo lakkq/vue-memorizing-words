@@ -1,46 +1,73 @@
 <script setup>
-import { ref } from "vue";
-
+import { ref, computed } from "vue";
 import RightIcon from "../../assets/icons/RightIcon.vue";
 import WrongIcon from "../../assets/icons/WrongIcon.vue";
 
-const {
-  num = 1,
-  textEng = "null",
-  textRus = "Пусто",
-} = defineProps(["num", "textEng", "textRus"]);
+const props = defineProps({
+  num: {
+    type: Number,
+    default: 1,
+  },
+  textEng: {
+    type: String,
+    default: "null",
+  },
+  textRus: {
+    type: String,
+    default: "Пусто",
+  },
+});
 
 const isFlipped = ref(false);
 const isRight = ref(true);
 const isAnswered = ref(false);
+
+// Форматирование номера (01, 02...)
+const formattedNum = computed(() => {
+  return props.num < 10 ? `0${props.num}` : props.num;
+});
+
+const handleAnswer = (correct) => {
+  isRight.value = correct;
+  isAnswered.value = true;
+};
 </script>
 
 <template>
   <div class="card-container">
     <div class="card" :class="{ 'is-flipped': isFlipped }">
-      <div class="card__side card__front" @click="isFlipped = !isFlipped">
+      <!-- FRONT -->
+      <div class="card__side card__front" @click="isFlipped = true">
         <div class="card__wrapper">
-          <p class="card__number">
-            {{ num >= 1 && num < 10 ? `0${num}` : num }}
-          </p>
+          <p class="card__number">{{ formattedNum }}</p>
           <p class="card__txt">{{ textEng }}</p>
           <p class="card__subtxt">Перевернуть</p>
         </div>
       </div>
 
+      <!-- BACK -->
       <div class="card__side card__back">
         <div class="card__wrapper">
-          <RightIcon width="40" height="40" class="card__icon" v-if="isAnswered && isRight" />
-          <WrongIcon width="40" height="40" class="card__icon" v-if="isAnswered && !isRight" />
-          <p class="card__number">
-            {{ num >= 1 && num < 10 ? `0${num}` : num }}
-          </p>
+          <!-- Статус ответа -->
+          <template v-if="isAnswered">
+            <component
+              :is="isRight ? RightIcon : WrongIcon"
+              width="40"
+              height="40"
+              class="card__icon"
+            />
+          </template>
+
+          <p class="card__number">{{ formattedNum }}</p>
           <p class="card__txt">{{ textRus }}</p>
+
+          <!-- Кнопки выбора -->
           <div v-if="!isAnswered" class="card__btns">
-            <RightIcon @click="isAnswered = true" />
-            <WrongIcon @click="isAnswered = true" />
+            <RightIcon class="btn-icon" @click="handleAnswer(true)" />
+            <WrongIcon class="btn-icon" @click="handleAnswer(false)" />
           </div>
-          <p v-if="isAnswered" class="card__subtxt">Завершено</p>
+
+          <p v-else class="card__subtxt">Завершено</p>
         </div>
       </div>
     </div>
@@ -48,6 +75,15 @@ const isAnswered = ref(false);
 </template>
 
 <style scoped>
+/* Ваши стили остаются прежними, можно добавить курсор для кнопок */
+.btn-icon {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn-icon:hover {
+  transform: scale(1.2);
+}
+
 .card-container {
   width: 250px;
   height: 376px;
@@ -108,7 +144,6 @@ const isAnswered = ref(false);
   top: 0;
   left: 16px;
   transform: translate(0, -50%);
-  text-align: center;
 }
 
 .card__txt {
@@ -144,10 +179,10 @@ const isAnswered = ref(false);
 }
 
 .card__icon {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
 }
 </style>
