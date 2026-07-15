@@ -8,17 +8,17 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-  textEng: {
+  word: {
     type: String,
     default: "null",
   },
-  textRus: {
+  translation: {
     type: String,
     default: "Пусто",
   },
 });
 
-const state = ref('closed');
+const isFlipped = ref(false);
 const status = ref("pending"); // success | fail | pending
 
 // Форматирование номера (01, 02...)
@@ -33,12 +33,12 @@ const handleAnswer = (correct) => {
 
 <template>
   <div class="card-container">
-    <div class="card" :class="{ 'is-flipped': state === 'opened' }">
+    <div class="card" :class="{ 'is-flipped': isFlipped }">
       <!-- FRONT -->
-      <div class="card__side card__front" @click="state = 'opened'">
+      <div class="card__side card__front" @click="isFlipped = true">
         <div class="card__wrapper">
           <p class="card__number">{{ formattedNum }}</p>
-          <p class="card__txt">{{ textEng }}</p>
+          <p class="card__txt">{{ word }}</p>
           <p class="card__subtxt">Перевернуть</p>
         </div>
       </div>
@@ -57,7 +57,8 @@ const handleAnswer = (correct) => {
           </template>
 
           <p class="card__number">{{ formattedNum }}</p>
-          <p class="card__txt">{{ textRus }}</p>
+          <p class="card__txt">{{ translation }}</p>
+
 
           <!-- Кнопки выбора -->
           <div v-if="status === 'pending'" class="card__btns">

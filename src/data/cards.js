@@ -1,6 +1,6 @@
 export const cardsData = [
-  { id: 1, textEng: "Apple", textRus: "Яблоко" },
-  { id: 2, textEng: "Tree", textRus: "Дерево" },
-  { id: 3, textEng: "Cloud", textRus: "Облако" },
-  { id: 4, textEng: "River", textRus: "Река" },
+  { id: 1, word: "Apple", translation: "Яблоко", state: "pending", status: "pending" },
+  { id: 2, word: "Tree", translation: "Дерево", state: "pending", status: "pending" },
+  { id: 3, word: "Cloud", translation: "Облако", state: "pending", status: "pending" },
+  { id: 4, word: "River", translation: "Река", state: "pending", status: "pending" },
 ];
