@@ -18,9 +18,8 @@ const props = defineProps({
   },
 });
 
-const isFlipped = ref(false);
-const isRight = ref(true);
-const isAnswered = ref(false);
+const state = ref('closed');
+const status = ref("pending"); // success | fail | pending
 
 // Форматирование номера (01, 02...)
 const formattedNum = computed(() => {
@@ -28,16 +27,15 @@ const formattedNum = computed(() => {
 });
 
 const handleAnswer = (correct) => {
-  isRight.value = correct;
-  isAnswered.value = true;
+  status.value = correct ? "success" : "fail";
 };
 </script>
 
 <template>
   <div class="card-container">
-    <div class="card" :class="{ 'is-flipped': isFlipped }">
+    <div class="card" :class="{ 'is-flipped': state === 'opened' }">
       <!-- FRONT -->
-      <div class="card__side card__front" @click="isFlipped = true">
+      <div class="card__side card__front" @click="state = 'opened'">
         <div class="card__wrapper">
           <p class="card__number">{{ formattedNum }}</p>
           <p class="card__txt">{{ textEng }}</p>
@@ -49,9 +47,9 @@ const handleAnswer = (correct) => {
       <div class="card__side card__back">
         <div class="card__wrapper">
           <!-- Статус ответа -->
-          <template v-if="isAnswered">
+          <template v-if="status !== 'pending'">
             <component
-              :is="isRight ? RightIcon : WrongIcon"
+              :is="status === 'success' ? RightIcon : WrongIcon"
               width="40"
               height="40"
               class="card__icon"
@@ -62,7 +60,7 @@ const handleAnswer = (correct) => {
           <p class="card__txt">{{ textRus }}</p>
 
           <!-- Кнопки выбора -->
-          <div v-if="!isAnswered" class="card__btns">
+          <div v-if="status === 'pending'" class="card__btns">
             <RightIcon class="btn-icon" @click="handleAnswer(true)" />
             <WrongIcon class="btn-icon" @click="handleAnswer(false)" />
           </div>
