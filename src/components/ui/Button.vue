@@ -10,7 +10,6 @@
 .custom-button {
   background-color: var(--button-color);
   color: var(--font-color);
-  font-family: var(--font);
   font-size: 24px;
   border: none;
   padding: 16px 10px;
