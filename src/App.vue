@@ -8,32 +8,23 @@ import { cardsData } from "./data/cards";
 const cards = ref(cardsData);
 const score = ref(0);
 
-// Для демонстрации выводим первую карту
-const currentCard = ref(cards.value[0]);
 </script>
 
 <template>
-  <AppHeader />
-  <div class="game-info">
-    <span>Очки: {{ score }}</span>
-  </div>
+  <AppHeader :score />
   <Button>Начать игру</Button>
   <div class="cards-list">
     <Card
-      v-if="currentCard"
-      :num="currentCard.id"
-      :word="currentCard.word"
-      :translation="currentCard.translation"
+      v-for="card in cards"
+      :key="card.id"
+      :num="card.id"
+      :word="card.word"
+      :translation="card.translation"
     />
   </div>
 </template>
 
 <style scoped>
-.game-info {
-  text-align: center;
-  margin: 10px 0;
-  font-weight: bold;
-}
 .cards-list {
   display: flex;
   flex-wrap: wrap;
