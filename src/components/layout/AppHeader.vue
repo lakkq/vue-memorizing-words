@@ -1,11 +1,14 @@
 <script setup>
+import { ref } from "vue";
 import Score from "../ui/Score.vue";
+
+const scoreValue = ref(0)
 </script>
 
 <template>
   <section class="header">
     <p class="header__title">Запомни слово</p>
-    <Score />
+    <Score :value="scoreValue" />
   </section>
 </template>
 
