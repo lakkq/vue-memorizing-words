@@ -2,13 +2,14 @@
 import { ref } from "vue";
 import Score from "../ui/Score.vue";
 
-const scoreValue = ref(0)
+const { score } = defineProps({ score: Number });
+
 </script>
 
 <template>
   <section class="header">
     <p class="header__title">Запомни слово</p>
-    <Score :value="scoreValue" />
+    <Score :value="score" />
   </section>
 </template>
 
@@ -22,8 +23,8 @@ const scoreValue = ref(0)
 }
 
 .header__title {
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 </style>
