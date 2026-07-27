@@ -6,7 +6,7 @@ import WrongIcon from "../../assets/icons/WrongIcon.vue";
 const props = defineProps({
   num: {
     type: Number,
-    default: 1,
+    default: 0,
   },
   word: {
     type: String,
