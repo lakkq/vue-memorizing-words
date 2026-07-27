@@ -12,7 +12,13 @@ const fetchCards = async () => {
   try {
     const response = await fetch("http://localhost:8080/api/random-words");
     if (response.ok) {
-      cards.value = await response.json();
+      const cardsList = await response.json();
+      cards.value = cardsList.map((card) => ({
+        ...card,
+        state: "pending",
+        status: "pending",
+        id: cardsList.indexOf(card) + 1,
+      }));
     } else {
       console.warn("Сервер ответил с ошибкой");
     }
