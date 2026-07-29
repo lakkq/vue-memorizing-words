@@ -16,26 +16,33 @@ const props = defineProps({
     type: String,
     default: "Пусто",
   },
+  state: {
+    type: String,
+    default: "pending",
+  },
+  status: {
+    type: String,
+    default: "pending",
+  },
 });
 
-const isFlipped = ref(false);
-const status = ref("pending"); // success | fail | pending
+const emit = defineEmits(['flipCard', 'answerCard'])
 
-// Форматирование номера (01, 02...)
 const formattedNum = computed(() => {
   return props.num < 10 ? `0${props.num}` : props.num;
 });
 
 const handleAnswer = (correct) => {
-  status.value = correct ? "success" : "fail";
+  correct ? emit('answerCard', "success") : emit('answerCard', "fail")
 };
+console.log(props.state)
 </script>
 
 <template>
   <div class="card-container">
-    <div class="card" :class="{ 'is-flipped': isFlipped }">
+    <div class="card" :class="{ 'is-flipped': props.state === 'flipped' }">
       <!-- FRONT -->
-      <div class="card__side card__front" @click="isFlipped = true">
+      <div class="card__side card__front" @click="emit('flipCard')">
         <div class="card__wrapper">
           <p class="card__number">{{ formattedNum }}</p>
           <p class="card__txt">{{ word }}</p>
@@ -58,7 +65,6 @@ const handleAnswer = (correct) => {
 
           <p class="card__number">{{ formattedNum }}</p>
           <p class="card__txt">{{ translation }}</p>
-
 
           <!-- Кнопки выбора -->
           <div v-if="status === 'pending'" class="card__btns">
