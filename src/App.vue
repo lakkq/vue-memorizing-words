@@ -27,21 +27,35 @@ const fetchCards = async () => {
   }
 };
 
-onBeforeMount(fetchCards);
+const startButton = () => {
+  fetchCards();
+  cards.value = cards.value.map((card) => ({
+    ...card,
+    state: "pending",
+    status: "pending",
+  }));
+};
+
+const answerHandler = (card, stat) => {
+  console.log(stat)
+  stat === 'success' ? score.value += 10 : score.value -= 4
+  card.status = stat
+};
 </script>
 
 <template>
   <AppHeader :score />
-  <Button>Начать игру</Button>
+  <Button v-if="!cards.length" @click="startButton">Начать игру</Button>
   <div class="cards-list">
     <Card
+      v-if="cards.length"
       v-for="card in cards"
-      :key="card.id"
-      :num="card.id"
-      :word="card.word"
-      :translation="card.translation"
+      v-bind="card"
+      @flip-card="card.state = 'flipped'"
+      @answer-card="(stat) => answerHandler(card, stat)"
     />
   </div>
+  <Button v-if="cards.length" @click="startButton">Начать заново</Button>
 </template>
 
 <style scoped>
